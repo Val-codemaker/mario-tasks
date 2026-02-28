@@ -121,6 +121,13 @@ function App() {
     const newStatus = !task.completed;
     if (newStatus) setMarioState('mushroom-spawn');
 
+    // Add temporary hit animation to the specific task
+    const element = document.getElementById(`task-${task.id}`);
+    if (element) {
+      element.classList.add('hit-animation');
+      setTimeout(() => element.classList.remove('hit-animation'), 300);
+    }
+
     await supabase.from('tasks')
       .update({ completed: newStatus })
       .eq('id', task.id);
@@ -268,6 +275,7 @@ function App() {
                   animate={{ scale: 1, opacity: 1 }}
                   whileHover={{ scale: 1.02 }}
                   key={task.id}
+                  id={`task-${task.id}`}
                   className={`question-block flex items-center justify-between group transition-all ${task.completed ? 'grayscale opacity-40' : ''}`}
                 >
                   <div className="flex items-center gap-8">
