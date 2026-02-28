@@ -112,6 +112,9 @@ function App() {
       { title: newTask, user_id: user.id, category }
     ]);
     setNewTask('');
+    // Trigger Mario Jump or Run animation when task is added
+    setMarioState('jumping');
+    setTimeout(() => setMarioState('running'), 500);
   };
 
   const toggleTask = async (task) => {
@@ -258,11 +261,12 @@ function App() {
             </form>
 
             <div className="space-y-6">
-              {tasks.map(task => (
+              {tasks.filter(t => t.category === category).map(task => (
                 <motion.div
                   layout
-                  initial={{ x: -50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  whileHover={{ scale: 1.02 }}
                   key={task.id}
                   className={`question-block flex items-center justify-between group transition-all ${task.completed ? 'grayscale opacity-40' : ''}`}
                 >
