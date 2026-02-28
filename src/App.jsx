@@ -200,21 +200,22 @@ function App() {
     <div className={`min-h-screen transition-all duration-700 relative overflow-hidden ${theme === 'light' ? 'bg-[#5C94FC]' : 'bg-[#000]'}`}>
 
       {/* Animated Parallax Background Layers */}
-      {theme === 'light' && (
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute inset-0 bg-repeat-x opacity-40"
-            style={{
-              backgroundImage: 'url(/overworld.png)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'bottom'
-            }}
-          />
-          {/* Layered clouds for depth */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0 bg-repeat-x opacity-40 transition-all duration-1000"
+          style={{
+            backgroundImage: theme === 'light' ? 'url(/overworld.png)' : 'url(/underground.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'bottom'
+          }}
+        />
+        {theme === 'light' && (
           <div className="absolute top-20 left-10 w-32 h-16 bg-white/20 rounded-full blur-xl animate-pulse" />
-          <div className="absolute top-40 right-20 w-48 h-20 bg-white/10 rounded-full blur-2xl animate-bounce" />
-        </div>
-      )}
+        )}
+        {theme === 'dark' && (
+          <div className="absolute inset-0 bg-black/40" />
+        )}
+      </div>
 
       <HUD score={score} coins={tasks.filter(t => t.completed).length} world={category} />
 
