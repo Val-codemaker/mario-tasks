@@ -88,12 +88,21 @@ function App() {
       setScore(completedCount * 100);
 
       if (data.length > 0 && data.every(t => t.completed)) {
-        setMarioState('fighting');
+        if (marioState !== 'victory') setMarioState('fighting');
       } else {
         setMarioState('running');
       }
     }
   };
+
+  useEffect(() => {
+    if (marioState === 'fighting') {
+      const timer = setTimeout(() => {
+        setMarioState('victory');
+      }, 3000); // Fight for 3 seconds, then win
+      return () => clearTimeout(timer);
+    }
+  }, [marioState]);
 
   const addTask = async (e) => {
     e.preventDefault();

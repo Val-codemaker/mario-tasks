@@ -2,45 +2,81 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const MarioSprite = ({ state, onCollectMushroom }) => {
-    // We use high-quality sprite URLs for authenticity
-    const SPRITES = {
-        running: 'https://raw.githubusercontent.com/Val-codemaker/mario-tasks/main/public/mario_walk.gif', // Placeholder or use CSS
-        jump: 'https://img.itch.zone/aW1nLzExMTY0NjUucG5n/original/K1o1J%2B.png', // Just for visual reference in prompt
-        bowser: 'https://raw.githubusercontent.com/Val-codemaker/mario-tasks/main/public/bowser.gif'
+    // Use the newly generated high-quality assets
+    const ASSETS = {
+        mario: '/mario_sprites.png',
+        bowser: '/bowser.png',
+        mushroom: '/mario_walk.gif' // Keeping previous for small items or using CSS
     };
 
-    // CSS Based Mario to ensure pixel-perfect without broken URLs
-    const MarioPixel = () => (
-        <motion.div
-            animate={state === 'running' ? { y: [0, -5, 0] } : {}}
-            transition={{ duration: 0.4, repeat: Infinity }}
-            className="relative w-12 h-14"
-        >
-            {/* Representing Mario with layered pixel blocks for a "wow" retro feel */}
-            <div className="absolute inset-0 bg-red-600 border-2 border-black">
-                <div className="absolute top-0 left-2 w-8 h-4 bg-red-800" /> {/* Hat */}
-                <div className="absolute top-4 left-4 w-6 h-4 bg-[#FFCC99]" /> {/* Face */}
-                <div className="absolute bottom-0 left-0 w-full h-6 bg-blue-700" /> {/* Overalls */}
-                <div className="absolute bottom-0 left-0 w-4 h-2 bg-yellow-400" /> {/* Button */}
-                <div className="absolute bottom-0 right-0 w-4 h-2 bg-yellow-400" /> {/* Button */}
-            </div>
-        </motion.div>
-    );
+    const getMarioStyle = () => {
+        switch (state) {
+            case 'jumping':
+                return { scale: 1.2, y: -20 };
+            case 'fighting':
+                return { x: [0, 10, 0], scale: 1.1 };
+            case 'victory':
+                return { scale: 1.5, rotate: [0, 10, -10, 0] };
+            default:
+                return { x: [0, 5, 0] };
+        }
+    };
 
     return (
         <div className="relative flex items-end justify-center h-full w-full">
-            <div className="flex items-end gap-20">
-                <MarioPixel />
+            <div className="flex items-end gap-16 relative">
 
+                {/* Mario Pixel Art */}
+                <motion.div
+                    animate={getMarioStyle()}
+                    transition={{ duration: 0.5, repeat: state === 'victory' ? 0 : Infinity }}
+                    className="relative w-20 h-24 overflow-hidden"
+                >
+                    <img
+                        src={ASSETS.mario}
+                        alt="Mario"
+                        className="w-full h-full object-contain pixelated"
+                    />
+                    {state === 'victory' && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 0 }}
+                            animate={{ opacity: 1, y: -40 }}
+                            className="absolute top-0 left-0 w-full text-center text-yellow-400 font-pixel text-[10px]"
+                        >
+                            COURSE CLEAR!
+                        </motion.div>
+                    )}
+                </motion.div>
+
+                {/* Bowser / Boss */}
                 {state === 'fighting' && (
                     <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1.5, x: [-20, 20, -20] }}
-                        transition={{ duration: 0.5, repeat: Infinity }}
-                        className="w-20 h-20 bg-green-700 border-4 border-black relative rounded-t-3xl"
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1.8, x: [0, 5, -5, 0] }}
+                        transition={{ duration: 0.2, repeat: Infinity }}
+                        className="w-32 h-32"
                     >
-                        <div className="absolute -top-4 left-4 w-4 h-4 bg-red-500 rounded-full animate-ping" />
-                        <div className="absolute top-4 left-4 text-[8px] text-white">BOSS</div>
+                        <img
+                            src={ASSETS.bowser}
+                            alt="Bowser"
+                            className="w-full h-full object-contain pixelated"
+                        />
+                    </motion.div>
+                )}
+
+                {/* Vanishing Bowser after defeat */}
+                {state === 'victory' && (
+                    <motion.div
+                        initial={{ opacity: 1, scale: 1.8 }}
+                        animate={{ opacity: 0, scale: 2.5, y: -100, rotate: 360 }}
+                        transition={{ duration: 1 }}
+                        className="w-32 h-32 absolute right-[-100px]"
+                    >
+                        <img
+                            src={ASSETS.bowser}
+                            alt="Bowser Defeated"
+                            className="w-full h-full object-contain pixelated grayscale"
+                        />
                     </motion.div>
                 )}
             </div>
@@ -48,10 +84,12 @@ const MarioSprite = ({ state, onCollectMushroom }) => {
             {state === 'mushroom-spawn' && (
                 <motion.div
                     initial={{ y: 0, opacity: 0 }}
-                    animate={{ y: -60, opacity: 1, scale: [1, 1.2, 1] }}
+                    animate={{ y: -80, opacity: 1 }}
                     onAnimationComplete={onCollectMushroom}
-                    className="absolute bottom-20 w-8 h-8 bg-mario-ground border-4 border-black rounded-full"
-                />
+                    className="absolute bottom-20 w-10 h-10 bg-mario-ground border-4 border-black rounded-full flex items-center justify-center"
+                >
+                    <div className="w-4 h-4 bg-white rounded-full opacity-50" />
+                </motion.div>
             )}
         </div>
     );
