@@ -4,42 +4,108 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --mario-sky: #5C94FC;
+  --mario-ground: #E45C10;
+  --mario-grass: #00A800;
+  --mario-pipe: #00A800;
+  --mario-pipe-dark: #007000;
+  --mario-pipe-light: #80F800;
+}
+
 @layer base {
   body {
     font-family: 'Press Start 2P', system-ui;
     image-rendering: pixelated;
+    @apply bg-mario-sky overflow-x-hidden;
   }
 }
 
 @layer components {
-  .retro-button {
-    @apply relative px-6 py-2 bg-mario-ground text-white border-4 border-black active:top-1 active:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
-  }
-  
-  .retro-panel {
-    @apply border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+
+  /* Premium Retro Button */
+  .retro-button-premium {
+    @apply relative px-8 py-3 text-white transition-all duration-75;
+    background: #e45c10;
+    box-shadow:
+      inset -4px -4px 0px 0px #8c3000,
+      inset 4px 4px 0px 0px #ff8c40,
+      0px 6px 0px 0px #000;
+    border: 4px solid #000;
   }
 
-  .pipe-category {
-    @apply w-12 h-24 bg-mario-pipe border-x-4 border-black relative;
+  .retro-button-premium:active {
+    @apply translate-y-1;
+    box-shadow:
+      inset -4px -4px 0px 0px #8c3000,
+      inset 4px 4px 0px 0px #ff8c40,
+      0px 2px 0px 0px #000;
   }
 
-  .pipe-top {
-    @apply w-16 h-8 bg-mario-pipe border-4 border-black absolute -top-8 -left-2;
+  /* Question Block Style for Tasks */
+  .question-block {
+    @apply relative p-5 bg-[#F8B800] border-4 border-black;
+    box-shadow:
+      inset -4px -4px 0px 0px #B87800,
+      inset 4px 4px 0px 0px #F8F800,
+      4px 4px 0px 0px rgba(0, 0, 0, 0.2);
+  }
+
+  .question-block::before,
+  .question-block::after {
+    content: '';
+    @apply absolute w-2 h-2 bg-black;
+  }
+
+  .question-block::before {
+    top: 2px;
+    left: 2px;
+  }
+
+  .question-block::after {
+    bottom: 2px;
+    right: 2px;
+  }
+
+  /* Authentic Pipe Styles */
+  .mario-pipe-container {
+    @apply relative w-16 h-32;
+  }
+
+  .mario-pipe-top {
+    @apply absolute -top-8 -left-2 w-20 h-10 border-4 border-black;
+    background: linear-gradient(to right, #007000 0%, #00A800 20%, #80F800 50%, #00A800 80%, #007000 100%);
+  }
+
+  .mario-pipe-body {
+    @apply w-full h-full border-x-4 border-black;
+    background: linear-gradient(to right, #007000 0%, #00A800 20%, #80F800 50%, #00A800 80%, #007000 100%);
+  }
+
+  /* HUD Styling */
+  .smw-hud-text {
+    @apply text-white uppercase tracking-tighter drop-shadow-[3px_3px_0px_rgba(0, 0, 0, 1)];
+    font-size: 14px;
+    line-height: 1.5;
   }
 }
 
-.overworld-bg {
-  background-color: #5C94FC;
-  background-image: 
-    linear-gradient(45deg, #F8B800 25%, transparent 25%),
-    linear-gradient(-45deg, #F8B800 25%, transparent 25%);
-  background-size: 100px 100px;
+/* Background Animations */
+@keyframes cloud-drift {
+  from {
+    transform: translateX(100vw);
+  }
+
+  to {
+    transform: translateX(-100px);
+  }
 }
 
-.underground-bg {
-  background-color: #000000;
-  background-image: 
-    radial-gradient(circle at 10px 10px, #333 2px, transparent 0);
-  background-size: 20px 20px;
+.cloud-layered {
+  @apply absolute opacity-80;
+  animation: cloud-drift 60s linear infinite;
+}
+
+.mountain-bg {
+  mask-image: linear-gradient(to top, black 80%, transparent);
 }
