@@ -4,12 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 const MarioSprite = ({ state, onCollectMushroom }) => {
     const [frame, setFrame] = useState(0);
 
-    // Animation logic for walking frames
+    // Animation logic for walking frames (3 frames)
     useEffect(() => {
         if (state === 'running') {
             const interval = setInterval(() => {
                 setFrame(f => (f + 1) % 3);
-            }, 150);
+            }, 120);
             return () => clearInterval(interval);
         } else {
             setFrame(0);
@@ -21,11 +21,11 @@ const MarioSprite = ({ state, onCollectMushroom }) => {
         bowser: '/bowser.png'
     };
 
-    // Sprite segments (Assuming sheet layout: [Walk1, Walk2, Walk3, Jump, Victory])
-    const getMarioSegment = () => {
-        if (state === 'victory') return '75%'; // Last frame
-        if (state === 'jumping') return '50%'; // 4th frame
-        return `${(frame * 25)}%`; // First 3 frames 0, 25, 50... wait
+    // Frame Mapping (0:Walk1, 1:Walk2, 2:Walk3, 3:Jump, 4:Victory)
+    const getMarioPosition = () => {
+        if (state === 'victory') return '100% 0%';
+        if (state === 'jumping') return '75% 0%';
+        return `${(frame * 25)}% 0%`; // Steps of 25% for first 3 frames
     };
 
     return (
@@ -34,19 +34,20 @@ const MarioSprite = ({ state, onCollectMushroom }) => {
 
                 {/* Mario with Sprite Sheet Frame Animation */}
                 <motion.div
-                    animate={state === 'jumping' ? { y: -60 } : { y: 0 }}
-                    className="relative w-16 h-20 overflow-hidden"
+                    animate={state === 'jumping' ? { y: -70 } : { y: 0 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    className="relative w-20 h-24 overflow-hidden"
                     style={{
                         backgroundImage: `url(${ASSETS.marioSheet})`,
-                        backgroundSize: '400% 100%', // 4 frames width
-                        backgroundPosition: `${getMarioSegment()} 0%`,
+                        backgroundSize: '500% 100%', // 5 frames
+                        backgroundPosition: getMarioPosition(),
                         backgroundRepeat: 'no-repeat',
-                        // Simple magenta removal attempt via filter (experimental)
-                        filter: 'contrast(1.2) saturate(1.2)'
+                        mixBlendMode: 'multiply', // Hides WHITE background
+                        imageRendering: 'pixelated'
                     }}
                 >
                     {state === 'victory' && (
-                        <div className="absolute -top-10 w-full text-center text-yellow-400 font-pixel text-[8px] animate-bounce">
+                        <div className="absolute -top-12 w-full text-center text-yellow-400 font-pixel text-[10px] animate-bounce whitespace-nowrap">
                             COURSE CLEAR!
                         </div>
                     )}
@@ -57,33 +58,33 @@ const MarioSprite = ({ state, onCollectMushroom }) => {
                     {state === 'fighting' && (
                         <motion.div
                             initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 2, opacity: 1, x: [0, 5, -5, 0] }}
-                            exit={{ scale: 0, opacity: 0, y: -100, rotate: 360 }}
-                            transition={{ duration: 0.3 }}
+                            animate={{ scale: 2.2, opacity: 1, x: [0, 5, -5, 0] }}
+                            exit={{ scale: 0, opacity: 0, y: -150, rotate: 720 }}
+                            transition={{ duration: 0.4 }}
                             className="w-24 h-24"
                         >
                             <img
                                 src={ASSETS.bowser}
                                 alt="Bowser"
                                 className="w-full h-full object-contain pixelated"
-                                style={{ filter: 'contrast(1.1)' }}
+                                style={{ mixBlendMode: 'multiply' }}
                             />
                         </motion.div>
                     )}
                 </AnimatePresence>
             </div>
 
-            {/* Item Spawn */}
+            {/* Question Block Interaction Effect */}
             <AnimatePresence>
                 {state === 'mushroom-spawn' && (
                     <motion.div
-                        initial={{ y: 0, opacity: 0 }}
-                        animate={{ y: -100, opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        initial={{ y: 0, opacity: 0, scale: 0.5 }}
+                        animate={{ y: -120, opacity: 1, scale: 1.5 }}
+                        exit={{ opacity: 0, scale: 2 }}
                         onAnimationComplete={onCollectMushroom}
-                        className="absolute bottom-24 w-12 h-12 flex items-center justify-center bg-yellow-400 border-4 border-black rounded-lg"
+                        className="absolute bottom-24 w-14 h-14 flex items-center justify-center bg-[#F8B800] border-4 border-black rounded-sm shadow-[inset_-4px_-4px_#B87800,inset_4px_4px_#F8F800]"
                     >
-                        <span className="text-white text-[10px]">?</span>
+                        <span className="text-white text-xl font-bold">?</span>
                     </motion.div>
                 )}
             </AnimatePresence>

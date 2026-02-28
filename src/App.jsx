@@ -311,7 +311,7 @@ function App() {
                   <div
                     key={cat}
                     onClick={() => setCategory(cat)}
-                    className={`cursor-pointer group flex flex-col items-center transition-all ${category === cat ? 'scale-110 -translate-y-4' : 'opacity-40 hover:opacity-80'}`}
+                    className={`cursor-pointer group flex flex-col items-center transition-all ${category === cat ? 'pipe-active scale-110 -translate-y-4' : 'opacity-40 hover:opacity-80'}`}
                   >
                     <div className="mario-pipe-container">
                       <div className={`mario-pipe-top ${category === cat ? 'animate-pulse shadow-[0px_0px_20px_#80F800]' : ''}`} />
