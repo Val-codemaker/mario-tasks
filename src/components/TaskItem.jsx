@@ -3,13 +3,7 @@ import { motion } from 'framer-motion';
 import { Trash2, CheckCircle, Star, Clock } from 'lucide-react';
 
 const TaskItem = ({ task, onToggle, onDelete }) => {
-    const getPriorityColor = () => {
-        switch (task.priority) {
-            case 'high': return '#FF0000';
-            case 'medium': return '#F8B800';
-            default: return '#80F800';
-        }
-    };
+
 
     return (
         <motion.div

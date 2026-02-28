@@ -6,6 +6,11 @@ import { motion, AnimatePresence } from 'framer-motion';
  * Handles frame animations for the 5-frame spritesheet.
  * Frames: [0: Walk1, 1: Walk2, 2: Walk3, 3: Jump, 4: Victory]
  */
+// Clarity helper
+const getMarioPosition = (frame) => {
+    return `${frame * 25}% 0%`;
+};
+
 const MarioSprite = ({ state, theme }) => {
     const [frame, setFrame] = useState(0);
 
@@ -28,11 +33,6 @@ const MarioSprite = ({ state, theme }) => {
     const marioAsset = '/mario_pro.png';
     const bowserAsset = '/bowser_pro.png';
 
-    // Calculate background position based on 5 equal segments (20% each)
-    const getMarioPos = () => {
-        return `${frame * 25}% 0%`; // Since it's 5 frames, positions are 0%, 25%, 50%, 75%, 100%
-    };
-
     return (
         <div className="relative flex items-end justify-center h-full w-full">
             <div className="flex items-end gap-12 sm:gap-24 relative">
@@ -45,8 +45,7 @@ const MarioSprite = ({ state, theme }) => {
                     style={{
                         backgroundImage: `url(${marioAsset})`,
                         backgroundSize: '500% 100%', // 5 frames
-                        backgroundPosition: getMarioPosition(frame), // Helper function below for clarity
-                        backgroundPositionX: `${frame * 25}%`,
+                        backgroundPosition: getMarioPosition(frame),
                         backgroundRepeat: 'no-repeat',
                         imageRendering: 'pixelated',
                         mixBlendMode: 'multiply', // Hides the PURE WHITE background
@@ -101,9 +100,5 @@ const MarioSprite = ({ state, theme }) => {
     );
 };
 
-// Clarity helper
-const getMarioPosition = (frame) => {
-    return `${frame * 25}% 0%`;
-};
-
 export default MarioSprite;
+

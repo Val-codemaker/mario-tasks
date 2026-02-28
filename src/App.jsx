@@ -106,6 +106,12 @@ function App() {
     await supabase.from('tasks').delete().eq('id', id);
   };
 
+  const handleGiveUp = () => {
+    setGameOver(true);
+    setMarioState('dead');
+  };
+
+
   // Sorting Logic: Priority (High > Medium > Low) then Date
   const filteredTasks = tasks
     .filter(t => t.category === category)
