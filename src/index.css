@@ -11,30 +11,82 @@
   --mario-pipe: #00A800;
   --mario-pipe-dark: #007000;
   --mario-pipe-light: #80F800;
+  --panel-bg: #FFFFFF;
+  --panel-border: #000000;
+  --panel-shadow: #B8B8B8;
 }
 
 @layer base {
   body {
     font-family: 'Press Start 2P', system-ui;
     image-rendering: pixelated;
-    @apply bg-mario-sky overflow-x-hidden;
+    @apply bg-mario-sky overflow-x-hidden text-black;
   }
 }
 
 @layer components {
 
-  /* Premium Retro Button */
-  .retro-button-premium {
-    @apply relative px-8 py-3 text-white transition-all duration-75;
+  /* --- PROFESSIONAL RETRO PANELS --- */
+  .pro-panel {
+    @apply relative bg-white border-[4px] border-black p-6;
+    box-shadow:
+      inset -6px -6px 0px 0px #e0e0e0,
+      inset 6px 6px 0px 0px #ffffff,
+      8px 8px 0px 0px rgba(0, 0, 0, 0.15);
+  }
+
+  .pro-panel-dark {
+    @apply relative bg-[#303030] border-[4px] border-black p-6 text-white;
+    box-shadow:
+      inset -6px -6px 0px 0px #101010,
+      inset 6px 6px 0px 0px #505050,
+      8px 8px 0px 0px rgba(0, 0, 0, 0.4);
+  }
+
+  /* --- QUESTION BLOCK (MISSION ITEM) --- */
+  .mission-block {
+    @apply relative p-6 bg-[#F8B800] border-[4px] border-black transition-all cursor-pointer mb-4;
+    box-shadow:
+      inset -4px -4px 0px 0px #B87800,
+      inset 4px 4px 0px 0px #F8F800,
+      6px 6px 0px 0px rgba(0, 0, 0, 0.1);
+  }
+
+  .mission-block:hover {
+    @apply -translate-y-1;
+    box-shadow:
+      inset -4px -4px 0px 0px #B87800,
+      inset 4px 4px 0px 0px #F8F800,
+      6px 10px 0px 0px rgba(0, 0, 0, 0.1);
+  }
+
+  .mission-block:active {
+    @apply translate-y-1 translate-x-1;
+    box-shadow:
+      inset -4px -4px 0px 0px #B87800,
+      inset 4px 4px 0px 0px #F8F800,
+      0px 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+
+  .mission-block.completed {
+    @apply bg-[#909090] border-[#404040] opacity-70;
+    box-shadow:
+      inset -4px -4px 0px 0px #505050,
+      inset 4px 4px 0px 0px #b0b0b0;
+  }
+
+  /* --- PRO BUTTONS --- */
+  .pro-button {
+    @apply relative px-6 py-3 uppercase text-[10px] tracking-widest text-white transition-all cursor-pointer;
     background: #e45c10;
+    border: 4px solid #000;
     box-shadow:
       inset -4px -4px 0px 0px #8c3000,
       inset 4px 4px 0px 0px #ff8c40,
       0px 6px 0px 0px #000;
-    border: 4px solid #000;
   }
 
-  .retro-button-premium:active {
+  .pro-button:active {
     @apply translate-y-1;
     box-shadow:
       inset -4px -4px 0px 0px #8c3000,
@@ -42,100 +94,100 @@
       0px 2px 0px 0px #000;
   }
 
-  /* Question Block Style for Tasks */
-  .question-block {
-    @apply relative p-5 bg-[#F8B800] border-4 border-black transition-all cursor-pointer;
+  .pro-button-secondary {
+    @apply pro-button;
+    background: #5C94FC;
     box-shadow:
-      inset -4px -4px 0px 0px #B87800,
-      inset 4px 4px 0px 0px #F8F800,
-      4px 4px 0px 0px rgba(0, 0, 0, 0.2);
+      inset -4px -4px 0px 0px #3050C0,
+      inset 4px 4px 0px 0px #80B0FF,
+      0px 6px 0px 0px #000;
   }
 
-  .question-block:active {
-    transform: scale(0.95);
+  /* --- AUTHENTIC PIPES --- */
+  .pipe-item {
+    @apply relative cursor-pointer transition-all flex flex-col items-center;
   }
 
-  .question-block::before,
-  .question-block::after {
-    content: '';
-    @apply absolute w-2 h-2 bg-black;
-  }
-
-  .question-block::before {
-    top: 2px;
-    left: 2px;
-  }
-
-  .question-block::after {
-    bottom: 2px;
-    right: 2px;
-  }
-
-  /* Authentic Pipe Styles */
-  .mario-pipe-container {
-    @apply relative w-16 h-32;
-  }
-
-  .mario-pipe-top {
-    @apply absolute -top-8 -left-2 w-20 h-10 border-4 border-black transition-all;
+  .pipe-head {
+    @apply w-20 h-10 border-[4px] border-black relative;
     background: linear-gradient(to right, #007000 0%, #00A800 20%, #80F800 50%, #00A800 80%, #007000 100%);
   }
 
-  .mario-pipe-body {
-    @apply w-full h-full border-x-4 border-black;
+  .pipe-body {
+    @apply w-16 h-28 border-x-[4px] border-black;
     background: linear-gradient(to right, #007000 0%, #00A800 20%, #80F800 50%, #00A800 80%, #007000 100%);
   }
 
-  /* Active Pipe Visual Feedback */
-  .pipe-active .mario-pipe-top {
-    box-shadow: 0 0 20px #80F800;
-    border-color: #80F800;
+  .pipe-active .pipe-head {
+    @apply ring-4 ring-yellow-400;
+    filter: brightness(1.2) drop-shadow(0 0 15px rgba(255, 230, 0, 0.6));
   }
 
-  /* HUD Styling */
-  .smw-hud-text {
-    @apply text-white uppercase tracking-tighter;
-    filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 1));
-    font-size: 14px;
-    line-height: 1.5;
-  }
-}
-
-/* Background Animations */
-@keyframes cloud-drift {
-  from {
-    transform: translateX(100vw);
+  /* --- UTILITIES --- */
+  .pixel-text-shadow {
+    text-shadow: 3px 3px 0px #000;
   }
 
-  to {
-    transform: translateX(-100px);
+  .pixelated {
+    image-rendering: pixelated;
   }
 }
 
-.cloud-layered {
-  @apply absolute opacity-80;
-  animation: cloud-drift 60s linear infinite;
-}
+/* --- ANIMATIONS --- */
+@keyframes coin-bounce {
 
-.mountain-bg {
-  mask-image: linear-gradient(to top, black 80%, transparent);
-}
-
-/* hit bounce animation */
-.hit-animation {
-  animation: hit-bounce 0.2s ease-out;
-}
-
-@keyframes hit-bounce {
-  0% {
+  0%,
+  100% {
     transform: translateY(0);
   }
 
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-15px);
+  }
+}
+
+.animate-coin {
+  animation: coin-bounce 0.8s ease-in-out infinite;
+}
+
+@keyframes cloud-float {
+  from {
+    transform: translateX(110vw);
   }
 
-  100% {
-    transform: translateY(0);
+  to {
+    transform: translateX(-20vw);
+  }
+}
+
+.cloud {
+  animation: cloud-float 80s linear infinite;
+}
+
+.hit-shake {
+  animation: shake 0.2s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shake {
+
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
   }
 }

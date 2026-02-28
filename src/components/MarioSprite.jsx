@@ -1,70 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const MarioSprite = ({ state, onCollectMushroom }) => {
+/**
+ * MarioSprite - Professional 16-bit Sprite Renderer
+ * Handles frame animations for the 5-frame spritesheet.
+ * Frames: [0: Walk1, 1: Walk2, 2: Walk3, 3: Jump, 4: Victory]
+ */
+const MarioSprite = ({ state, theme }) => {
     const [frame, setFrame] = useState(0);
 
-    // Animation logic for walking frames (3 frames)
+    // Animation cycle for walking
     useEffect(() => {
         if (state === 'running') {
             const interval = setInterval(() => {
                 setFrame(f => (f + 1) % 3);
-            }, 120);
+            }, 100);
             return () => clearInterval(interval);
+        } else if (state === 'victory') {
+            setFrame(4);
+        } else if (state === 'jumping') {
+            setFrame(3);
         } else {
             setFrame(0);
         }
     }, [state]);
 
-    const ASSETS = {
-        marioSheet: '/mario_sprites.png',
-        bowser: '/bowser.png'
-    };
+    const marioAsset = '/mario_pro.png';
+    const bowserAsset = '/bowser_pro.png';
 
-    // Frame Mapping (0:Walk1, 1:Walk2, 2:Walk3, 3:Jump, 4:Victory)
-    const getMarioPosition = () => {
-        if (state === 'victory') return '100% 0%';
-        if (state === 'jumping') return '75% 0%';
-        return `${(frame * 25)}% 0%`; // Steps of 25% for first 3 frames
+    // Calculate background position based on 5 equal segments (20% each)
+    const getMarioPos = () => {
+        return `${frame * 25}% 0%`; // Since it's 5 frames, positions are 0%, 25%, 50%, 75%, 100%
     };
 
     return (
         <div className="relative flex items-end justify-center h-full w-full">
-            <div className="flex items-end gap-16 relative">
+            <div className="flex items-end gap-12 sm:gap-24 relative">
 
-                {/* Mario with Sprite Sheet Frame Animation */}
+                {/* PRO MARIO */}
                 <motion.div
-                    animate={state === 'jumping' ? { y: -70 } : { y: 0 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                    className="relative w-20 h-24 overflow-hidden"
+                    animate={state === 'jumping' ? { y: -80 } : { y: 0 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                    className="relative w-24 h-24 overflow-hidden"
                     style={{
-                        backgroundImage: `url(${ASSETS.marioSheet})`,
+                        backgroundImage: `url(${marioAsset})`,
                         backgroundSize: '500% 100%', // 5 frames
-                        backgroundPosition: getMarioPosition(),
+                        backgroundPosition: getMarioPosition(frame), // Helper function below for clarity
+                        backgroundPositionX: `${frame * 25}%`,
                         backgroundRepeat: 'no-repeat',
-                        mixBlendMode: 'multiply', // Hides WHITE background
-                        imageRendering: 'pixelated'
+                        imageRendering: 'pixelated',
+                        mixBlendMode: 'multiply', // Hides the PURE WHITE background
                     }}
                 >
                     {state === 'victory' && (
-                        <div className="absolute -top-12 w-full text-center text-yellow-400 font-pixel text-[10px] animate-bounce whitespace-nowrap">
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: -20 }}
+                            className="absolute -top-10 w-full text-center text-yellow-500 font-pixel text-[10px] whitespace-nowrap pixel-text-shadow"
+                        >
                             COURSE CLEAR!
-                        </div>
+                        </motion.div>
                     )}
                 </motion.div>
 
-                {/* Bowser */}
+                {/* PRO BOWSER (Boss State) */}
                 <AnimatePresence>
                     {state === 'fighting' && (
                         <motion.div
-                            initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 2.2, opacity: 1, x: [0, 5, -5, 0] }}
-                            exit={{ scale: 0, opacity: 0, y: -150, rotate: 720 }}
-                            transition={{ duration: 0.4 }}
+                            initial={{ scale: 0, opacity: 0, x: 100 }}
+                            animate={{ scale: 3, opacity: 1, x: 0 }}
+                            exit={{ scale: 0, opacity: 0, y: -200, rotate: 1080 }}
+                            transition={{ duration: 0.5, type: 'spring' }}
                             className="w-24 h-24"
                         >
                             <img
-                                src={ASSETS.bowser}
+                                src={bowserAsset}
                                 alt="Bowser"
                                 className="w-full h-full object-contain pixelated"
                                 style={{ mixBlendMode: 'multiply' }}
@@ -74,22 +84,26 @@ const MarioSprite = ({ state, onCollectMushroom }) => {
                 </AnimatePresence>
             </div>
 
-            {/* Question Block Interaction Effect */}
+            {/* FX: Mushroom Spawn */}
             <AnimatePresence>
                 {state === 'mushroom-spawn' && (
                     <motion.div
-                        initial={{ y: 0, opacity: 0, scale: 0.5 }}
-                        animate={{ y: -120, opacity: 1, scale: 1.5 }}
-                        exit={{ opacity: 0, scale: 2 }}
-                        onAnimationComplete={onCollectMushroom}
-                        className="absolute bottom-24 w-14 h-14 flex items-center justify-center bg-[#F8B800] border-4 border-black rounded-sm shadow-[inset_-4px_-4px_#B87800,inset_4px_4px_#F8F800]"
+                        initial={{ y: 0, opacity: 0, scale: 0 }}
+                        animate={{ y: -150, opacity: 1, scale: 2 }}
+                        exit={{ opacity: 0, scale: 3 }}
+                        className="absolute bottom-32 w-8 h-8 flex items-center justify-center bg-red-600 border-2 border-black rounded-sm"
                     >
-                        <span className="text-white text-xl font-bold">?</span>
+                        <div className="w-full h-full bg-[url('https://files.freemusicarchive.org/storage-freemusicarchive-org/images/albums/Super_Mario_World_Mushroom_-_20150917173153544.png')] bg-contain" />
                     </motion.div>
                 )}
             </AnimatePresence>
         </div>
     );
+};
+
+// Clarity helper
+const getMarioPosition = (frame) => {
+    return `${frame * 25}% 0%`;
 };
 
 export default MarioSprite;
