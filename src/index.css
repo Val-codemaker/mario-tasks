@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Press Start 2P', system-ui;
+    image-rendering: pixelated;
+  }
+}
+
+@layer components {
+  .retro-button {
+    @apply relative px-6 py-2 bg-mario-ground text-white border-4 border-black active:top-1 active:shadow-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+  }
+  
+  .retro-panel {
+    @apply border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+  }
+
+  .pipe-category {
+    @apply w-12 h-24 bg-mario-pipe border-x-4 border-black relative;
+  }
+
+  .pipe-top {
+    @apply w-16 h-8 bg-mario-pipe border-4 border-black absolute -top-8 -left-2;
+  }
+}
+
+.overworld-bg {
+  background-color: #5C94FC;
+  background-image: 
+    linear-gradient(45deg, #F8B800 25%, transparent 25%),
+    linear-gradient(-45deg, #F8B800 25%, transparent 25%);
+  background-size: 100px 100px;
+}
+
+.underground-bg {
+  background-color: #000000;
+  background-image: 
+    radial-gradient(circle at 10px 10px, #333 2px, transparent 0);
+  background-size: 20px 20px;
+}
