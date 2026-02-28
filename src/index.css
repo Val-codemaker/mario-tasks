@@ -44,11 +44,15 @@
 
   /* Question Block Style for Tasks */
   .question-block {
-    @apply relative p-5 bg-[#F8B800] border-4 border-black;
+    @apply relative p-5 bg-[#F8B800] border-4 border-black transition-all cursor-pointer;
     box-shadow:
       inset -4px -4px 0px 0px #B87800,
       inset 4px 4px 0px 0px #F8F800,
       4px 4px 0px 0px rgba(0, 0, 0, 0.2);
+  }
+
+  .question-block:active {
+    transform: scale(0.95);
   }
 
   .question-block::before,
@@ -73,13 +77,19 @@
   }
 
   .mario-pipe-top {
-    @apply absolute -top-8 -left-2 w-20 h-10 border-4 border-black;
+    @apply absolute -top-8 -left-2 w-20 h-10 border-4 border-black transition-all;
     background: linear-gradient(to right, #007000 0%, #00A800 20%, #80F800 50%, #00A800 80%, #007000 100%);
   }
 
   .mario-pipe-body {
     @apply w-full h-full border-x-4 border-black;
     background: linear-gradient(to right, #007000 0%, #00A800 20%, #80F800 50%, #00A800 80%, #007000 100%);
+  }
+
+  /* Active Pipe Visual Feedback */
+  .pipe-active .mario-pipe-top {
+    box-shadow: 0 0 20px #80F800;
+    border-color: #80F800;
   }
 
   /* HUD Styling */
@@ -109,4 +119,23 @@
 
 .mountain-bg {
   mask-image: linear-gradient(to top, black 80%, transparent);
+}
+
+/* hit bounce animation */
+.hit-animation {
+  animation: hit-bounce 0.2s ease-out;
+}
+
+@keyframes hit-bounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
