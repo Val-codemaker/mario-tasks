@@ -84,7 +84,8 @@
 
   /* HUD Styling */
   .smw-hud-text {
-    @apply text-white uppercase tracking-tighter drop-shadow-[3px_3px_0px_rgba(0, 0, 0, 1)];
+    @apply text-white uppercase tracking-tighter;
+    filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 1));
     font-size: 14px;
     line-height: 1.5;
   }
