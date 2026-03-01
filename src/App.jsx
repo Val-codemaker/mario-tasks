@@ -5,6 +5,8 @@ import HUD from './components/HUD';
 import GameHero from './components/GameHero';
 import TaskItem from './components/TaskItem';
 import PomodoroTimer from './components/PomodoroTimer';
+import FolderList from './components/FolderList';
+import BadgeDisplay from './components/BadgeDisplay';
 import { Plus, LogOut, Ghost, Star, Zap, Flame, Shield, Trophy } from 'lucide-react';
 
 const SAGAS = [
@@ -27,12 +29,20 @@ function App() {
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [authError, setAuthError] = useState(null);
+  const [folders, setFolders] = useState(['MAIN']);
+  const [activeFolder, setActiveFolder] = useState('MAIN');
 
   const fetchTasks = useCallback(async () => {
     const { data } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
     if (data) {
       setTasks(data);
-      setScore(data.filter(t => t.completed).length * 500);
+      const completedCount = data.filter(t => t.completed).length;
+      const badgesCount = Math.floor(completedCount / 3);
+      setScore(completedCount * 500 + badgesCount * 1000);
+
+      // Extract unique folders from tasks
+      const uniqueFolders = Array.from(new Set(data.map(t => t.folder || 'MAIN')));
+      setFolders(uniqueFolders.length > 0 ? uniqueFolders : ['MAIN']);
     }
   }, []);
 
@@ -69,6 +79,7 @@ function App() {
       title: newTask,
       user_id: user.id,
       priority: newPriority,
+      folder: activeFolder,
     }]).select();
 
     if (!error && data) {
@@ -154,6 +165,22 @@ function App() {
 
           <PomodoroTimer saga={saga} />
 
+          <FolderList
+            folders={folders}
+            activeFolder={activeFolder}
+            onSelect={setActiveFolder}
+            onAdd={(name) => {
+              if (!folders.includes(name)) setFolders([...folders, name]);
+              setActiveFolder(name);
+            }}
+            saga={saga}
+          />
+
+          <BadgeDisplay
+            completedCount={tasks.filter(t => t.completed).length}
+            saga={saga}
+          />
+
           <button onClick={() => supabase.auth.signOut()} className="pro-button-secondary w-full flex items-center justify-center gap-4 py-6">
             <LogOut size={16} /> EXIT GAME
           </button>
@@ -190,14 +217,16 @@ function App() {
 
           <div className="space-y-4">
             <AnimatePresence mode="popLayout">
-              {tasks.map(task => (
-                <TaskItem
-                  key={task.id}
-                  task={task}
-                  onToggle={() => toggleTask(task)}
-                  onDelete={() => deleteTask(task.id)}
-                />
-              ))}
+              {tasks
+                .filter(t => (t.folder || 'MAIN') === activeFolder)
+                .map(task => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    onToggle={() => toggleTask(task)}
+                    onDelete={() => deleteTask(task.id)}
+                  />
+                ))}
             </AnimatePresence>
             {tasks.length === 0 && (
               <div className="text-center py-20 opacity-20 flex flex-col items-center gap-4">
