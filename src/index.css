@@ -13,6 +13,7 @@
   --theme-text: #000000;
   --theme-border: #000000;
   --theme-bg-pattern: url('/mario_bg.png');
+  --theme-text-outline: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
 
 [data-theme='pacman'] {
@@ -23,6 +24,7 @@
   --theme-text: #FFFFFF;
   --theme-border: #2121DE;
   --theme-bg-pattern: url('/pacman_bg.png');
+  --theme-text-outline: none;
   background-size: 40px 40px;
 }
 
@@ -34,6 +36,7 @@
   --theme-text: #000000;
   --theme-border: #000000;
   --theme-bg-pattern: url('/sonic_bg.png');
+  --theme-text-outline: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, 100% 100%;
 }
 
@@ -45,6 +48,7 @@
   --theme-text: #000000;
   --theme-border: #3A5DA8;
   --theme-bg-pattern: url('/pokemon_bg.png');
+  --theme-text-outline: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   background-size: 50px 50px;
   background-position: 0 0, 25px 25px, 0 0;
 }
@@ -57,12 +61,15 @@
   --theme-text: #204000;
   --theme-border: #204000;
   --theme-bg-pattern: url('/zelda_bg.png');
+  --theme-text-outline: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   background-size: 80px 140px;
 }
 
 @layer base {
   body {
     font-family: 'Press Start 2P', system-ui;
+    background-attachment: fixed;
+    text-shadow: var(--theme-text-outline);
     image-rendering: pixelated;
     @apply overflow-x-hidden text-[var(--theme-text)] min-h-screen font-pixel;
   }
