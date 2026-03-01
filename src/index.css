@@ -12,10 +12,7 @@
   --theme-panel: rgba(255, 255, 255, 0.85);
   --theme-text: #000000;
   --theme-border: #000000;
-  --theme-bg-pattern:
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 10%),
-    radial-gradient(circle at 80% 60%, rgba(255, 255, 255, 0.2) 0%, transparent 12%),
-    linear-gradient(to bottom, #5C94FC, #2152ff);
+  --theme-bg-pattern: url('/mario_bg.png');
 }
 
 [data-theme='pacman'] {
@@ -25,9 +22,7 @@
   --theme-panel: rgba(16, 16, 16, 0.8);
   --theme-text: #FFFFFF;
   --theme-border: #2121DE;
-  --theme-bg-pattern:
-    linear-gradient(90deg, rgba(33, 33, 222, 0.1) 1px, transparent 1px),
-    linear-gradient(rgba(33, 33, 222, 0.1) 1px, transparent 1px);
+  --theme-bg-pattern: url('/pacman_bg.png');
   background-size: 40px 40px;
 }
 
@@ -38,12 +33,7 @@
   --theme-panel: rgba(255, 255, 255, 0.85);
   --theme-text: #000000;
   --theme-border: #000000;
-  --theme-bg-pattern:
-    linear-gradient(45deg, #0a52e0 25%, transparent 25%),
-    linear-gradient(-45deg, #0a52e0 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #0a52e0 75%),
-    linear-gradient(-45deg, transparent 75%, #0a52e0 75%),
-    linear-gradient(to bottom, #0040C0, #001a4d);
+  --theme-bg-pattern: url('/sonic_bg.png');
   background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, 100% 100%;
 }
 
@@ -54,10 +44,7 @@
   --theme-panel: rgba(240, 240, 240, 0.85);
   --theme-text: #000000;
   --theme-border: #3A5DA8;
-  --theme-bg-pattern:
-    radial-gradient(circle, rgba(255, 255, 255, 0.1) 20%, transparent 20%),
-    radial-gradient(circle, rgba(255, 255, 255, 0.1) 20%, transparent 20%),
-    linear-gradient(to bottom, #ff5555, #cc0000);
+  --theme-bg-pattern: url('/pokemon_bg.png');
   background-size: 50px 50px;
   background-position: 0 0, 25px 25px, 0 0;
 }
@@ -69,13 +56,7 @@
   --theme-panel: rgba(250, 249, 246, 0.9);
   --theme-text: #204000;
   --theme-border: #204000;
-  --theme-bg-pattern:
-    linear-gradient(30deg, #004d00 12%, transparent 12.5%, transparent 87%, #004d00 87.5%, #004d00),
-    linear-gradient(150deg, #004d00 12%, transparent 12.5%, transparent 87%, #004d00 87.5%, #004d00),
-    linear-gradient(30deg, #004d00 12%, transparent 12.5%, transparent 87%, #004d00 87.5%, #004d00),
-    linear-gradient(150deg, #004d00 12%, transparent 12.5%, transparent 87%, #004d00 87.5%, #004d00),
-    linear-gradient(60deg, #008000 25%, transparent 25.5%, transparent 75%, #008000 75%, #008000),
-    linear-gradient(60deg, #008000 25%, transparent 25.5%, transparent 75%, #008000 75%, #008000);
+  --theme-bg-pattern: url('/zelda_bg.png');
   background-size: 80px 140px;
 }
 
@@ -84,7 +65,9 @@
     font-family: 'Press Start 2P', system-ui;
     image-rendering: pixelated;
     transition: background 0.5s ease;
-    background: var(--theme-bg-pattern);
+    background-image: var(--theme-bg-pattern);
+    background-size: cover;
+    background-position: center;
     background-attachment: fixed;
     @apply overflow-x-hidden text-[var(--theme-text)] min-h-screen font-pixel;
   }
@@ -95,7 +78,7 @@
 
   /* --- PROFESSIONAL RETRO PANELS --- */
   .pro-panel {
-    @apply relative border-[4px] border-[var(--theme-border)] p-6 backdrop-blur-md;
+    @apply relative border-[4px] border-[var(--theme-border)] p-6 backdrop-blur-xl;
     background-color: var(--theme-panel);
     color: var(--theme-text);
     box-shadow:
