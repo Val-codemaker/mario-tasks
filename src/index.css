@@ -64,12 +64,22 @@
   body {
     font-family: 'Press Start 2P', system-ui;
     image-rendering: pixelated;
-    transition: background 0.5s ease;
+    @apply overflow-x-hidden text-[var(--theme-text)] min-h-screen font-pixel;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
     background-image: var(--theme-bg-pattern);
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
-    @apply overflow-x-hidden text-[var(--theme-text)] min-h-screen font-pixel;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s ease;
   }
 }
 

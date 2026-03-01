@@ -4,6 +4,7 @@ import { supabase } from './lib/supabase';
 import HUD from './components/HUD';
 import GameHero from './components/GameHero';
 import TaskItem from './components/TaskItem';
+import PomodoroTimer from './components/PomodoroTimer';
 import { Plus, LogOut, Ghost, Star, Zap, Flame, Shield, Trophy } from 'lucide-react';
 
 const SAGAS = [
@@ -150,6 +151,8 @@ function App() {
           </div>
 
           <GameHero saga={saga} state={gameStatus} />
+
+          <PomodoroTimer saga={saga} />
 
           <button onClick={() => supabase.auth.signOut()} className="pro-button-secondary w-full flex items-center justify-center gap-4 py-6">
             <LogOut size={16} /> EXIT GAME
