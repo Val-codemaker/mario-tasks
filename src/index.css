@@ -5,123 +5,130 @@
 @tailwind utilities;
 
 :root {
-  --mario-sky: #5C94FC;
-  --mario-ground: #E45C10;
-  --mario-grass: #00A800;
-  --mario-pipe: #00A800;
-  --mario-pipe-dark: #007000;
-  --mario-pipe-light: #80F800;
-  --panel-bg: #FFFFFF;
-  --panel-border: #000000;
-  --panel-shadow: #B8B8B8;
+  /* Default Mario Theme */
+  --theme-primary: #5C94FC;
+  --theme-secondary: #E45C10;
+  --theme-accent: #F8B800;
+  --theme-panel: #FFFFFF;
+  --theme-text: #000000;
+  --theme-border: #000000;
+}
+
+[data-theme='pacman'] {
+  --theme-primary: #000000;
+  --theme-secondary: #2121DE;
+  --theme-accent: #FFFF00;
+  --theme-panel: #101010;
+  --theme-text: #FFFFFF;
+  --theme-border: #2121DE;
+}
+
+[data-theme='sonic'] {
+  --theme-primary: #0040C0;
+  --theme-secondary: #F8D870;
+  --theme-accent: #E45C10;
+  --theme-panel: #FFFFFF;
+  --theme-text: #000000;
+  --theme-border: #000000;
+}
+
+[data-theme='pokemon'] {
+  --theme-primary: #FF0000;
+  --theme-secondary: #FFCC00;
+  --theme-accent: #3A5DA8;
+  --theme-panel: #F0F0F0;
+  --theme-text: #000000;
+  --theme-border: #3A5DA8;
+}
+
+[data-theme='zelda'] {
+  --theme-primary: #008000;
+  --theme-secondary: #A06020;
+  --theme-accent: #F8D800;
+  --theme-panel: #FAF9F6;
+  --theme-text: #204000;
+  --theme-border: #204000;
 }
 
 @layer base {
   body {
     font-family: 'Press Start 2P', system-ui;
     image-rendering: pixelated;
-    @apply bg-mario-sky overflow-x-hidden text-black;
+    transition: background-color 0.5s ease;
+    @apply bg-[var(--theme-primary)] overflow-x-hidden text-[var(--theme-text)];
   }
 }
+
 
 @layer components {
 
   /* --- PROFESSIONAL RETRO PANELS --- */
   .pro-panel {
-    @apply relative bg-white border-[4px] border-black p-6;
+    @apply relative border-[4px] border-[var(--theme-border)] p-6;
+    background-color: var(--theme-panel);
+    color: var(--theme-text);
     box-shadow:
-      inset -6px -6px 0px 0px #e0e0e0,
-      inset 6px 6px 0px 0px #ffffff,
+      inset -6px -6px 0px 0px rgba(0, 0, 0, 0.1),
+      inset 6px 6px 0px 0px rgba(255, 255, 255, 0.2),
       8px 8px 0px 0px rgba(0, 0, 0, 0.15);
   }
 
-  .pro-panel-dark {
-    @apply relative bg-[#303030] border-[4px] border-black p-6 text-white;
-    box-shadow:
-      inset -6px -6px 0px 0px #101010,
-      inset 6px 6px 0px 0px #505050,
-      8px 8px 0px 0px rgba(0, 0, 0, 0.4);
-  }
-
-  /* --- QUESTION BLOCK (MISSION ITEM) --- */
+  /* --- MISSION ITEM --- */
   .mission-block {
-    @apply relative p-6 bg-[#F8B800] border-[4px] border-black transition-all cursor-pointer mb-4;
+    @apply relative p-6 border-[4px] border-[var(--theme-border)] transition-all cursor-pointer mb-4;
+    background-color: var(--theme-accent);
+    color: var(--theme-text);
     box-shadow:
-      inset -4px -4px 0px 0px #B87800,
-      inset 4px 4px 0px 0px #F8F800,
+      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.2),
+      inset 4px 4px 0px 0px rgba(255, 255, 255, 0.3),
       6px 6px 0px 0px rgba(0, 0, 0, 0.1);
   }
 
   .mission-block:hover {
     @apply -translate-y-1;
-    box-shadow:
-      inset -4px -4px 0px 0px #B87800,
-      inset 4px 4px 0px 0px #F8F800,
-      6px 10px 0px 0px rgba(0, 0, 0, 0.1);
-  }
-
-  .mission-block:active {
-    @apply translate-y-1 translate-x-1;
-    box-shadow:
-      inset -4px -4px 0px 0px #B87800,
-      inset 4px 4px 0px 0px #F8F800,
-      0px 0px 0px 0px rgba(0, 0, 0, 0);
+    filter: brightness(1.1);
   }
 
   .mission-block.completed {
-    @apply bg-[#909090] border-[#404040] opacity-70;
-    box-shadow:
-      inset -4px -4px 0px 0px #505050,
-      inset 4px 4px 0px 0px #b0b0b0;
+    @apply opacity-50 grayscale;
   }
 
   /* --- PRO BUTTONS --- */
   .pro-button {
-    @apply relative px-6 py-3 uppercase text-[10px] tracking-widest text-white transition-all cursor-pointer;
-    background: #e45c10;
-    border: 4px solid #000;
+    @apply relative px-6 py-3 uppercase text-[10px] tracking-widest transition-all cursor-pointer;
+    background-color: var(--theme-secondary);
+    color: var(--theme-text);
+    border: 4px solid var(--theme-border);
     box-shadow:
-      inset -4px -4px 0px 0px #8c3000,
-      inset 4px 4px 0px 0px #ff8c40,
-      0px 6px 0px 0px #000;
+      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.2),
+      inset 4px 4px 0px 0px rgba(255, 255, 255, 0.3),
+      0px 6px 0px 0px var(--theme-border);
   }
 
   .pro-button:active {
     @apply translate-y-1;
     box-shadow:
-      inset -4px -4px 0px 0px #8c3000,
-      inset 4px 4px 0px 0px #ff8c40,
-      0px 2px 0px 0px #000;
+      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.2),
+      inset 4px 4px 0px 0px rgba(255, 255, 255, 0.3),
+      0px 2px 0px 0px var(--theme-border);
   }
 
   .pro-button-secondary {
     @apply pro-button;
-    background: #5C94FC;
-    box-shadow:
-      inset -4px -4px 0px 0px #3050C0,
-      inset 4px 4px 0px 0px #80B0FF,
-      0px 6px 0px 0px #000;
+    background-color: var(--theme-primary);
   }
 
-  /* --- AUTHENTIC PIPES --- */
-  .pipe-item {
-    @apply relative cursor-pointer transition-all flex flex-col items-center;
+  /* --- SAGA SELECTION PIPES / BLOCKS --- */
+  .saga-item {
+    @apply relative cursor-pointer transition-all flex flex-col items-center p-2 border-4 border-transparent hover:border-[var(--theme-accent)];
+    background-color: rgba(255, 255, 255, 0.05);
   }
 
-  .pipe-head {
-    @apply w-20 h-10 border-[4px] border-black relative;
-    background: linear-gradient(to right, #007000 0%, #00A800 20%, #80F800 50%, #00A800 80%, #007000 100%);
+  .saga-active {
+    @apply border-[var(--theme-accent)] bg-[rgba(255, 255, 255, 0.1)];
+    filter: drop-shadow(0 0 10px var(--theme-accent));
   }
 
-  .pipe-body {
-    @apply w-16 h-28 border-x-[4px] border-black;
-    background: linear-gradient(to right, #007000 0%, #00A800 20%, #80F800 50%, #00A800 80%, #007000 100%);
-  }
-
-  .pipe-active .pipe-head {
-    @apply ring-4 ring-yellow-400;
-    filter: brightness(1.2) drop-shadow(0 0 15px rgba(255, 230, 0, 0.6));
-  }
 
   /* --- UTILITIES --- */
   .pixel-text-shadow {

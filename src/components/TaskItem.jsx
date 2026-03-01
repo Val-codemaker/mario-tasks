@@ -19,33 +19,29 @@ const TaskItem = ({ task, onToggle, onDelete }) => {
                 {/* Custom Retro Checkbox */}
                 <button
                     onClick={() => onToggle(task)}
-                    className={`w-12 h-12 flex items-center justify-center border-[4px] border-black transition-all ${task.completed ? 'bg-green-600' : 'bg-white hover:bg-yellow-200'}`}
+                    className="w-10 h-10 flex items-center justify-center border-[4px] border-[var(--theme-border)] transition-all bg-[var(--theme-panel)] hover:brightness-110"
                 >
                     {task.completed ? (
-                        <CheckCircle className="text-white" size={24} />
+                        <CheckCircle className="text-[var(--theme-primary)]" size={20} />
                     ) : (
-                        <span className="text-xl font-black">?</span>
+                        <span className="text-xl font-black text-[var(--theme-text)]">?</span>
                     )}
                 </button>
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-3">
-                        {task.priority === 'high' && <Star size={16} className="text-red-600 fill-current animate-pulse" />}
-                        <span className={`text-[12px] leading-relaxed uppercase font-bold ${task.completed ? 'line-through' : ''}`}>
+                        <span className={`text-[10px] sm:text-[12px] leading-relaxed uppercase font-black tracking-tight ${task.completed ? 'line-through opacity-40' : ''}`}>
                             {task.title}
                         </span>
                     </div>
 
                     <div className="flex gap-4 items-center">
-                        <span className="text-[8px] bg-black text-white px-2 py-1">
-                            WORLD: {task.category}
+                        <span
+                            className="text-[7px] px-2 py-0.5 border-2 border-[var(--theme-border)] font-bold"
+                            style={{ backgroundColor: task.priority === 'high' ? 'var(--theme-secondary)' : 'var(--theme-primary)', color: 'white' }}
+                        >
+                            {task.priority.toUpperCase()}
                         </span>
-                        {task.deadline && (
-                            <div className="flex items-center gap-1 text-[8px] text-black/60 font-bold">
-                                <Clock size={10} />
-                                {new Date(task.deadline).toLocaleDateString()}
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>
@@ -53,13 +49,14 @@ const TaskItem = ({ task, onToggle, onDelete }) => {
             <div className="flex items-center gap-4">
                 <button
                     onClick={() => onDelete(task.id)}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-red-100 border-[3px] border-transparent hover:border-black"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-red-500/10 border-[3px] border-transparent hover:border-[var(--theme-border)]"
                 >
-                    <Trash2 size={24} className="text-red-600" />
+                    <Trash2 size={20} className="text-red-600" />
                 </button>
             </div>
         </motion.div>
     );
 };
+
 
 export default TaskItem;
