@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Trash2, CheckCircle, Star, Clock } from 'lucide-react';
+import { motion as Motion } from 'framer-motion';
+import { Trash2, CheckCircle } from 'lucide-react';
 
 const TaskItem = ({ task, onToggle, onDelete }) => {
 
 
     return (
-        <motion.div
+        <Motion.div
             layout
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -54,7 +54,7 @@ const TaskItem = ({ task, onToggle, onDelete }) => {
                     <Trash2 size={20} className="text-red-600" />
                 </button>
             </div>
-        </motion.div>
+        </Motion.div>
     );
 };
 

@@ -8,7 +8,7 @@ const sagaHUD = {
     zelda: { label: 'LINK', item: 'RUPEES', itemColor: '#00A800' },
 };
 
-const HUD = ({ score, coins, lives, world, saga = 'mario' }) => {
+const HUD = ({ score, coins, world, saga = 'mario' }) => {
     const current = sagaHUD[saga] || sagaHUD.mario;
 
     return (

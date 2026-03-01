@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { supabase } from './lib/supabase';
 import HUD from './components/HUD';
 import GameHero from './components/GameHero';
@@ -27,6 +27,14 @@ function App() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [authError, setAuthError] = useState(null);
 
+  const fetchTasks = useCallback(async () => {
+    const { data } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
+    if (data) {
+      setTasks(data);
+      setScore(data.filter(t => t.completed).length * 500);
+    }
+  }, []);
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', saga);
   }, [saga]);
@@ -41,7 +49,7 @@ function App() {
       if (session?.user) fetchTasks();
     });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [fetchTasks]);
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -52,13 +60,6 @@ function App() {
     if (error) setAuthError(error.message);
   };
 
-  const fetchTasks = async () => {
-    const { data } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
-    if (data) {
-      setTasks(data);
-      setScore(data.filter(t => t.completed).length * 500);
-    }
-  };
 
   const addTask = async (e) => {
     e.preventDefault();
@@ -124,7 +125,6 @@ function App() {
       <HUD
         score={score}
         coins={tasks.filter(t => t.completed).length}
-        lives={tasks.filter(t => !t.completed).length}
         world="Overworld"
         saga={saga}
       />
