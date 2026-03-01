@@ -6,12 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
  * Handles frame animations for the 5-frame spritesheet.
  * Frames: [0: Walk1, 1: Walk2, 2: Walk3, 3: Jump, 4: Victory]
  */
-// Clarity helper
-const getMarioPosition = (frame) => {
-    return `${frame * 25}% 0%`;
-};
-
 const MarioSprite = ({ state, theme }) => {
+
     const [frame, setFrame] = useState(0);
 
     // Animation cycle for walking
@@ -30,8 +26,16 @@ const MarioSprite = ({ state, theme }) => {
         }
     }, [state]);
 
-    const marioAsset = '/mario_pro.png';
-    const bowserAsset = '/bowser_pro.png';
+    const getMarioAsset = () => {
+        if (state === 'jumping') return '/mario_jump.png';
+        if (state === 'victory') return '/mario_victory.png';
+        if (state === 'running') {
+            return frame === 1 ? '/mario_walk1.png' : frame === 2 ? '/mario_walk2.png' : '/mario_standing.png';
+        }
+        return '/mario_standing.png';
+    };
+
+    const bowserAsset = '/bowser_fixed.png';
 
     return (
         <div className="relative flex items-end justify-center h-full w-full">
@@ -41,14 +45,13 @@ const MarioSprite = ({ state, theme }) => {
                 <motion.div
                     animate={state === 'jumping' ? { y: -80 } : { y: 0 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                    className="relative w-24 h-24 overflow-hidden"
+                    className="relative w-24 h-24"
                     style={{
-                        backgroundImage: `url(${marioAsset})`,
-                        backgroundSize: '500% 100%', // 5 frames
-                        backgroundPosition: getMarioPosition(frame),
+                        backgroundImage: `url(${getMarioAsset()})`,
+                        backgroundSize: 'contain',
+                        backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',
                         imageRendering: 'pixelated',
-                        mixBlendMode: 'multiply', // Hides the PURE WHITE background
                     }}
                 >
                     {state === 'victory' && (
@@ -76,12 +79,12 @@ const MarioSprite = ({ state, theme }) => {
                                 src={bowserAsset}
                                 alt="Bowser"
                                 className="w-full h-full object-contain pixelated"
-                                style={{ mixBlendMode: 'multiply' }}
                             />
                         </motion.div>
                     )}
                 </AnimatePresence>
             </div>
+
 
             {/* FX: Mushroom Spawn */}
             <AnimatePresence>
