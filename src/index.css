@@ -120,14 +120,20 @@
 
   /* --- SAGA SELECTION PIPES / BLOCKS --- */
   .saga-item {
-    @apply relative cursor-pointer transition-all flex flex-col items-center p-2 border-4 border-transparent hover:border-[var(--theme-accent)];
+    @apply relative cursor-pointer transition-all flex flex-col items-center p-2 border-4 border-transparent;
     background-color: rgba(255, 255, 255, 0.05);
   }
 
+  .saga-item:hover {
+    border-color: var(--theme-accent);
+  }
+
   .saga-active {
-    @apply border-[var(--theme-accent)] bg-[rgba(255, 255, 255, 0.1)];
+    border-color: var(--theme-accent);
+    background-color: rgba(255, 255, 255, 0.1);
     filter: drop-shadow(0 0 10px var(--theme-accent));
   }
+
 
 
   /* --- UTILITIES --- */
