@@ -130,19 +130,11 @@
   }
 
   .pro-button:active {
-    transform: translate(2px, 2px);
-    box-shadow: none;
-  }
-
-  /* Retro Date Picker Styling */
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    cursor: pointer;
-  }
-
-  input[type="date"] {
-    color-scheme: dark;
-    text-transform: uppercase;
+    @apply translate-y-1;
+    box-shadow:
+      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.2),
+      inset 4px 4px 0px 0px rgba(255, 255, 255, 0.3),
+      0px 2px 0px 0px var(--theme-border);
   }
 
   .pro-button-secondary {

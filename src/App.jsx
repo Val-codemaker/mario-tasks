@@ -24,7 +24,6 @@ function App() {
   const [saga, setSaga] = useState('mario');
   const [gameStatus, setGameStatus] = useState('idle');
   const [score, setScore] = useState(0);
-  const [totalCompleted, setTotalCompleted] = useState(0);
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +31,7 @@ function App() {
   const [authError, setAuthError] = useState(null);
   const [folders, setFolders] = useState(['MAIN']);
   const [activeFolder, setActiveFolder] = useState('MAIN');
-  const [newDeadline, setNewDeadline] = useState('');
+  const [totalCompleted, setTotalCompleted] = useState(0);
 
   const fetchTasks = useCallback(async () => {
     const { data, error } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
@@ -40,13 +39,20 @@ function App() {
     if (data) {
       setTasks(data);
 
-      // Get total completed from user metadata for persistent badges
-      const metaCompleted = user?.user_metadata?.total_completed || 0;
-      setTotalCompleted(metaCompleted);
+      const { data: { user } } = await supabase.auth.getUser();
+      let total = user?.user_metadata?.completed_tasks_total;
 
-      const currentCompletedCount = data.filter(t => t.completed).length;
-      const badgesCount = Math.floor(metaCompleted / 3);
-      setScore(metaCompleted * 500); // Changed to use total completed for score
+      if (total === undefined) {
+        // Initial sync for existing users
+        total = data.filter(t => t.completed).length;
+        await supabase.auth.updateUser({
+          data: { completed_tasks_total: total }
+        });
+      }
+
+      setTotalCompleted(total);
+      const badgesCount = Math.floor(total / 3);
+      setScore(total * 500 + badgesCount * 1000);
 
       // Extract unique folders from tasks
       const uniqueFolders = Array.from(new Set(data.map(t => t.folder || 'MAIN')));
@@ -61,17 +67,11 @@ function App() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
-      if (session?.user) {
-        setTotalCompleted(session.user.user_metadata?.total_completed || 0);
-        fetchTasks();
-      }
+      if (session?.user) fetchTasks();
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
-      if (session?.user) {
-        setTotalCompleted(session.user.user_metadata?.total_completed || 0);
-        fetchTasks();
-      }
+      if (session?.user) fetchTasks();
     });
     return () => subscription.unsubscribe();
   }, [fetchTasks]);
@@ -94,14 +94,12 @@ function App() {
       user_id: user.id,
       priority: newPriority,
       folder: activeFolder,
-      deadline: newDeadline || null,
     }]).select();
 
     if (error) console.error('Error adding task:', error);
     if (!error && data) {
       setTasks([data[0], ...tasks]);
       setNewTask('');
-      setNewDeadline('');
       setGameStatus('jumping');
       setTimeout(() => setGameStatus('idle'), 500);
       fetchTasks();
@@ -115,15 +113,18 @@ function App() {
     if (!error) {
       if (newStatus) {
         setGameStatus('victory');
-
-        // Update persistent total completed in user metadata
         const newTotal = totalCompleted + 1;
         setTotalCompleted(newTotal);
         await supabase.auth.updateUser({
-          data: { total_completed: newTotal }
+          data: { completed_tasks_total: newTotal }
         });
-
         setTimeout(() => setGameStatus('idle'), 2000);
+      } else {
+        const newTotal = Math.max(0, totalCompleted - 1);
+        setTotalCompleted(newTotal);
+        await supabase.auth.updateUser({
+          data: { completed_tasks_total: newTotal }
+        });
       }
       fetchTasks();
     }
@@ -235,12 +236,6 @@ function App() {
                   <option value="medium">MEDIUM PRIORITY</option>
                   <option value="high">HIGH PRIORITY</option>
                 </select>
-                <input
-                  type="date"
-                  value={newDeadline}
-                  onChange={(e) => setNewDeadline(e.target.value)}
-                  className="bg-transparent border-4 border-[var(--theme-border)] p-2 font-pixel text-[8px] outline-none flex-1"
-                />
                 <button type="submit" className="pro-button px-8">
                   <Plus size={20} />
                 </button>
