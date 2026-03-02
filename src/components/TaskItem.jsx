@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion as Motion } from 'framer-motion';
-import { Trash2, CheckCircle } from 'lucide-react';
+import { Trash2, CheckCircle, Calendar } from 'lucide-react';
 
 const TaskItem = ({ task, onToggle, onDelete }) => {
 
@@ -15,9 +15,11 @@ const TaskItem = ({ task, onToggle, onDelete }) => {
             id={`task-${task.id}`}
             className={`mission-block group flex items-center justify-between ${task.completed ? 'completed' : ''}`}
             style={{
-                borderLeft: `8px solid ${task.priority === 'high' ? '#EF4444' :
-                        task.priority === 'medium' ? '#F59E0B' : '#10B981'
+                borderLeft: `8px solid ${task.priority === 'high' ? '#FF0000' :
+                    task.priority === 'medium' ? '#FFD700' : '#00FF00'
                     }`,
+                backgroundColor: task.priority === 'high' ? 'rgba(255, 0, 0, 0.05)' :
+                    task.priority === 'medium' ? 'rgba(255, 215, 0, 0.05)' : 'rgba(0, 255, 0, 0.05)',
                 opacity: task.completed ? 0.6 : 1
             }}
         >
@@ -43,16 +45,22 @@ const TaskItem = ({ task, onToggle, onDelete }) => {
 
                     <div className="flex gap-4 items-center">
                         <span
-                            className="text-[7px] px-2 py-0.5 border-2 border-[var(--theme-border)] font-bold"
+                            className="text-[7px] px-2 py-0.5 border-2 border-[var(--theme-border)] font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)]"
                             style={{
                                 backgroundColor:
-                                    task.priority === 'high' ? '#EF4444' :
-                                        task.priority === 'medium' ? '#F59E0B' : '#10B981',
+                                    task.priority === 'high' ? '#FF0000' :
+                                        task.priority === 'medium' ? '#FFD700' : '#00FF00',
                                 color: task.priority === 'medium' ? 'black' : 'white'
                             }}
                         >
                             {task.priority.toUpperCase()}
                         </span>
+                        {task.deadline && (
+                            <div className="flex items-center gap-1 text-[7px] opacity-70 font-bold uppercase">
+                                <Calendar size={8} />
+                                <span>DUE: {new Date(task.deadline).toLocaleDateString()}</span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
