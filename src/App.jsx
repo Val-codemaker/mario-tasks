@@ -175,7 +175,7 @@ function App() {
               <Trophy className="text-[var(--theme-text)] w-8 h-8" />
             </div>
           </div>
-          <h1 className="text-xl text-center mb-8 tracking-tighter font-black">QUEST LOG v2.0</h1>
+          <h1 className="text-xl text-center mb-8 tracking-tighter font-black">LISTA CALIXTA</h1>
           <form onSubmit={handleAuth} className="space-y-4">
             <input type="email" placeholder="EMAIL" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-transparent border-4 border-[var(--theme-border)] p-3 font-pixel text-[10px] outline-none" required />
             <input type="password" placeholder="PASSWORD" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-transparent border-4 border-[var(--theme-border)] p-3 font-pixel text-[10px] outline-none" required />
